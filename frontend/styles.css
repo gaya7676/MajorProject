@@ -1086,3 +1086,59 @@ h1 em {
     letter-spacing: -0.6px;
   }
 }
+
+
+/* ===================================
+   Back Navigation Arrow
+   =================================== */
+.back-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px 12px 16px;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--primary-navy);
+  font: 600 15px 'DM Sans', sans-serif;
+  transition: all 0.3s ease;
+  margin-bottom: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.back-nav:hover {
+  background: var(--teal-light);
+  border-color: var(--teal);
+  color: var(--teal-dark);
+  box-shadow: 0 4px 12px rgba(15, 157, 138, 0.15);
+  transform: translateX(-4px);
+}
+
+.back-arrow {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--teal);
+  transition: transform 0.3s ease;
+}
+
+.back-nav:hover .back-arrow {
+  transform: translateX(-3px);
+}
+
+.back-text {
+  letter-spacing: -0.1px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .back-nav {
+    padding: 10px 16px 10px 12px;
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  
+  .back-arrow {
+    font-size: 18px;
+  }
+}
