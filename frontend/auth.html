@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142D4E">
+<title>Credixa — Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/auth.css">
+</head>
+<body>
+<div class="auth-container">
+  <div class="auth-left">
+    <div class="auth-branding">
+      <div class="brand-large">
+        <div class="brand-mark">✳</div>
+        <span>Credixa</span>
+      </div>
+      <h1>A sharper resume.<br><em>A better next move.</em></h1>
+      <p class="auth-lead">Your career toolkit: a grounded resume review, user-controlled edits, verified versions, and job matches shaped around what you want next.</p>
+      
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="feature-icon">✳</div>
+          <div>
+            <strong>AI Resume Review</strong>
+            <p>Get tailored feedback and improvement suggestions</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="feature-icon">⌕</div>
+          <div>
+            <strong>Live Job Search</strong>
+            <p>Find matching opportunities with explainable scores</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="feature-icon">◈</div>
+          <div>
+            <strong>Skill Verification</strong>
+            <p>Proctored assessments with blockchain proof</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <div class="auth-form-container">
+      <form class="auth-form" id="authForm">
+        <div class="auth-form-header">
+          <div class="eyebrow" id="authEyebrow">Welcome back</div>
+          <h2 id="authTitle">Sign in to Credixa</h2>
+          <p id="authDescription">Open your private workspace and continue where you left off.</p>
+        </div>
+
+        <div class="form-fields">
+          <div id="nameWrap" class="form-field hide">
+            <label class="label" for="authName">Your name</label>
+            <input class="field" id="authName" autocomplete="name" placeholder="Enter your name">
+          </div>
+
+          <div class="form-field">
+            <label class="label" for="authEmail">Email address</label>
+            <input class="field" id="authEmail" type="email" autocomplete="email" required placeholder="you@example.com">
+          </div>
+
+          <div class="form-field">
+            <label class="label" for="authPassword">Password</label>
+            <div class="password-field">
+              <input class="field" id="authPassword" type="password" autocomplete="current-password" required placeholder="At least 12 characters">
+              <button type="button" class="password-toggle" id="togglePassword" aria-label="Show password">
+                <svg class="eye-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path class="eye-open" d="M10 3C5 3 1.73 7.11 1 10c.73 2.89 4 7 9 7s8.27-4.11 9-7c-.73-2.89-4-7-9-7zm0 12a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z" fill="currentColor"/>
+                  <path class="eye-closed hide" d="M10 7c-1.66 0-3 1.34-3 3 0 .55.15 1.06.41 1.5l1.75-1.75c-.01-.08-.03-.17-.03-.25 0-.83.67-1.5 1.5-1.5.08 0 .17.02.25.03l1.75-1.75c-.44-.26-.95-.41-1.5-.41zm7.97 3.03l-2.01 2.01A7.94 7.94 0 0018 10c-.73-2.89-4-7-9-7-1.11 0-2.15.19-3.12.52l1.49 1.49C8.23 4.34 9.09 4 10 4c3.79 0 6.88 2.88 7.93 6-.32 1.08-.83 2.08-1.5 2.98l1.54 1.54zm1.17 5.5l-17-17-1.27 1.27 2.06 2.06A9.88 9.88 0 002 10c.73 2.89 4 7 9 7 1.52 0 2.94-.38 4.17-1.03l2.09 2.09 1.27-1.27zM5.53 8.27l1.75 1.75c-.26.44-.41.95-.41 1.5 0 1.66 1.34 3 3 3 .55 0 1.06-.15 1.5-.41l1.75 1.75c-.86.33-1.79.52-2.78.52-3.79 0-6.88-2.88-7.93-6 .46-1.35 1.17-2.58 2.12-3.61z" fill="currentColor"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="confirmWrap" class="form-field hide">
+            <label class="label" for="authConfirm">Confirm password</label>
+            <div class="password-field">
+              <input class="field" id="authConfirm" type="password" autocomplete="new-password" placeholder="Type your password again">
+              <button type="button" class="password-toggle" id="toggleConfirm" aria-label="Show password">
+                <svg class="eye-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path class="eye-open" d="M10 3C5 3 1.73 7.11 1 10c.73 2.89 4 7 9 7s8.27-4.11 9-7c-.73-2.89-4-7-9-7zm0 12a5 5 0 110-10 5 5 0 010 10zm0-8a3 3 0 100 6 3 3 0 000-6z" fill="currentColor"/>
+                  <path class="eye-closed hide" d="M10 7c-1.66 0-3 1.34-3 3 0 .55.15 1.06.41 1.5l1.75-1.75c-.01-.08-.03-.17-.03-.25 0-.83.67-1.5 1.5-1.5.08 0 .17.02.25.03l1.75-1.75c-.44-.26-.95-.41-1.5-.41zm7.97 3.03l-2.01 2.01A7.94 7.94 0 0018 10c-.73-2.89-4-7-9-7-1.11 0-2.15.19-3.12.52l1.49 1.49C8.23 4.34 9.09 4 10 4c3.79 0 6.88 2.88 7.93 6-.32 1.08-.83 2.08-1.5 2.98l1.54 1.54zm1.17 5.5l-17-17-1.27 1.27 2.06 2.06A9.88 9.88 0 002 10c.73 2.89 4 7 9 7 1.52 0 2.94-.38 4.17-1.03l2.09 2.09 1.27-1.27zM5.53 8.27l1.75 1.75c-.26.44-.41.95-.41 1.5 0 1.66 1.34 3 3 3 .55 0 1.06-.15 1.5-.41l1.75 1.75c-.86.33-1.79.52-2.78.52-3.79 0-6.88-2.88-7.93-6 .46-1.35 1.17-2.58 2.12-3.61z" fill="currentColor"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn primary full-width" id="authSubmit" type="submit">Sign in</button>
+
+        <div class="auth-error" id="authError"></div>
+
+        <div class="auth-switch">
+          <span id="switchPrompt">New to Credixa?</span> 
+          <button class="link-button" id="switchAuth" type="button">Create an account</button>
+        </div>
+
+        <div class="auth-footer">
+          <p>Passwords are stored as one-way scrypt hashes. Your saved resume data is encrypted on the server. Use a unique password; this local MVP does not support password recovery yet.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/auth.js" defer></script>
+</body>
+</html>

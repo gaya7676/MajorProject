@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142D4E">
+<title>Credixa — Resume Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/resume-studio.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="/dashboard" style="text-decoration:none;color:#FFFFFF">
+    <div class="brand-mark">✳</div>
+    Credixa<span>/ Resume Studio</span>
+  </a>
+  <div class="top-right">
+    <a href="/dashboard" class="btn small ghost">← Back to Dashboard</a>
+    <div class="user-pill" id="userEmail"></div>
+    <button class="btn small" id="settingsBtn">⚙ Settings</button>
+    <button class="btn small" id="logoutBtn">Sign out</button>
+  </div>
+</header>
+
+<main class="studio-wrap">
+  <div class="studio-hero">
+    <div class="eyebrow">RESUME STUDIO</div>
+    <h1>Build a sharper resume.<br><em>Find your next move.</em></h1>
+    <p>Upload, analyze, improve, and match your resume with live opportunities.</p>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="studio-tabs">
+    <button class="studio-tab active" data-tab="upload">
+      <span class="tab-number">1</span>
+      <span class="tab-label">Upload Resume</span>
+    </button>
+    <button class="studio-tab" data-tab="analyze">
+      <span class="tab-number">2</span>
+      <span class="tab-label">Analyze</span>
+    </button>
+    <button class="studio-tab" data-tab="improve">
+      <span class="tab-number">3</span>
+      <span class="tab-label">Improve</span>
+    </button>
+    <button class="studio-tab" data-tab="jobs">
+      <span class="tab-number">4</span>
+      <span class="tab-label">Find Jobs</span>
+    </button>
+  </div>
+
+  <!-- Tab Panels -->
+  <div class="studio-content">
+    
+    <!-- Upload Resume Panel -->
+    <section class="studio-panel active" data-panel="upload">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Upload Your Resume</h2>
+            <p class="panel-desc">Upload a PDF, Word document, or text file. Your file is processed locally.</p>
+          </div>
+          <span class="tag">PRIVATE BY DESIGN</span>
+        </div>
+
+        <div class="drop-zone" id="dropZone">
+          <input id="fileInput" type="file" accept=".pdf,.docx,.txt,.md">
+          <div class="upload-icon">↥</div>
+          <strong>Drop your resume here or browse</strong>
+          <p>PDF, DOCX, TXT · up to 10 MB</p>
+        </div>
+
+        <div class="file-info" id="fileInfo">
+          <div class="file-icon">📄</div>
+          <div class="file-details">
+            <strong id="fileName">No file selected</strong>
+            <p id="fileSize"></p>
+          </div>
+          <button class="btn ghost small" id="removeFile">Remove</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="text-editor">
+          <label class="label" for="resumeText">
+            Resume Text 
+            <span class="label-hint">Review or paste your resume</span>
+          </label>
+          <textarea class="textarea" id="resumeText" placeholder="Upload a resume to extract its text, or paste it here. The AI will use only the text you provide."></textarea>
+        </div>
+
+        <div class="panel-actions">
+          <button class="btn primary" id="analyzeBtn">
+            ✦ Analyze Resume
+          </button>
+        </div>
+
+        <div id="uploadStatus" class="status"></div>
+      </div>
+    </section>
+
+    <!-- Analyze Resume Panel -->
+    <section class="studio-panel" data-panel="analyze">
+      <div class="panel-grid">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Resume Analysis</h2>
+              <p class="panel-desc">ATS-style scoring and detailed feedback</p>
+            </div>
+            <span class="tag" id="analysisTag">LOCAL REVIEW</span>
+          </div>
+
+          <div id="analysisEmpty" class="panel-empty">
+            <div class="empty-icon">◈</div>
+            <p>Upload or paste your resume, then click "Analyze Resume" to see your score, strengths, and opportunities.</p>
+          </div>
+
+          <div id="analysisResults" class="hide">
+            <div class="score-display">
+              <div class="score-ring" id="scoreRing">
+                <span id="scoreNumber">—</span>
+              </div>
+              <div class="score-info">
+                <div class="score-title" id="scoreTitle">ATS Readiness</div>
+                <div class="score-summary" id="scoreSummary"></div>
+              </div>
+            </div>
+
+            <div class="analysis-section">
+              <h3 class="section-heading">Strengths</h3>
+              <div id="strengthsList"></div>
+            </div>
+
+            <div class="analysis-section">
+              <h3 class="section-heading">Recommended Improvements</h3>
+              <div id="suggestionsList"></div>
+            </div>
+
+            <div class="panel-note">
+              ATS scores are estimates based on common resume practices. Real screening systems differ; no score guarantees an interview.
+            </div>
+          </div>
+
+          <div id="analyzeStatus" class="status"></div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">Extracted Skills</h2>
+              <p class="panel-desc">Detected from your resume</p>
+            </div>
+          </div>
+
+          <div id="skillsEmpty" class="panel-empty">
+            <p>Analyze your resume to see extracted skills.</p>
+          </div>
+
+          <div id="skillsList" class="skill-tags hide"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Improve Resume Panel -->
+    <section class="studio-panel" data-panel="improve">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Improve Your Resume</h2>
+            <p class="panel-desc">AI-powered suggestions for better wording and impact</p>
+          </div>
+          <span class="tag">AI ENHANCED</span>
+        </div>
+
+        <div id="improveEmpty" class="panel-empty">
+          <div class="empty-icon">✦</div>
+          <p>Analyze your resume first, then generate AI suggestions to improve your wording and presentation.</p>
+        </div>
+
+        <div id="suggestionsArea" class="hide">
+          <div class="panel-actions">
+            <button class="btn primary" id="generateBtn">
+              ✦ Generate AI Suggestions
+            </button>
+            <button class="btn" id="downloadBtn">
+              ↓ Download Resume
+            </button>
+          </div>
+
+          <div id="suggestionsContainer"></div>
+        </div>
+
+        <div id="improveStatus" class="status"></div>
+
+        <div class="panel-note">
+          Review each suggestion carefully. AI-generated edits should be verified for accuracy before use.
+        </div>
+      </div>
+    </section>
+
+    <!-- Find Jobs Panel -->
+    <section class="studio-panel" data-panel="jobs">
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Live Job Matches</h2>
+            <p class="panel-desc">Real opportunities ranked against your resume</p>
+          </div>
+          <span class="tag">WEB SEARCH</span>
+        </div>
+
+        <div id="jobsEmpty" class="panel-empty">
+          <div class="empty-icon">⌕</div>
+          <p>Analyze your resume to search for suitable roles. Results link to their original sources.</p>
+        </div>
+
+        <div id="jobsArea" class="hide">
+          <div class="search-options">
+            <div class="search-info" id="searchInfo">
+              Searching from the skills and experience in your resume.
+            </div>
+            <button class="btn" id="refineSearchBtn">
+              Refine Search Preferences
+            </button>
+          </div>
+
+          <div id="searchPreferences" class="preferences-panel hide">
+            <h3 class="section-heading">Tune Your Search</h3>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="label">Preferred Role</label>
+                <input class="field" id="prefRole" placeholder="e.g. Senior Backend Engineer">
+              </div>
+              <div class="form-field">
+                <label class="label">Experience Level</label>
+                <select class="field" id="prefExp">
+                  <option value="">Use my resume</option>
+                  <option>Entry level</option>
+                  <option>Mid level</option>
+                  <option>Senior</option>
+                  <option>Lead / Principal</option>
+                  <option>Manager</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label class="label">Skills / Technologies</label>
+                <input class="field" id="prefSkills" placeholder="e.g. Python, AWS, React">
+              </div>
+              <div class="form-field">
+                <label class="label">Location or Work Style</label>
+                <input class="field" id="prefLocation" placeholder="e.g. Bengaluru, remote">
+              </div>
+            </div>
+            <div class="panel-actions">
+              <button class="btn primary" id="searchWithPrefsBtn">
+                Search with Preferences
+              </button>
+              <button class="btn ghost" id="cancelPrefsBtn">
+                Cancel
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <button class="btn primary" id="findJobsBtn">
+              ⌕ Find Matching Jobs
+            </button>
+          </div>
+
+          <div id="jobsResults" class="jobs-grid"></div>
+        </div>
+
+        <div id="jobsStatus" class="status"></div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Connect Your Tools</h2>
+      <button class="modal-close" id="closeSettings">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-note">API keys are optional. Without keys, local resume analysis and the public remote-job feed are used. Keys you add stay in this tab only.</p>
+      
+      <div class="form-field">
+        <label class="label">LLM Provider</label>
+        <select class="field" id="provider">
+          <option value="openai">OpenAI compatible</option>
+          <option value="anthropic">Anthropic</option>
+          <option value="gemini">Google Gemini</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label class="label">LLM API Key</label>
+        <input class="field" type="password" id="llmKey" placeholder="Paste your provider key">
+      </div>
+
+      <div class="form-field">
+        <label class="label">Model (optional)</label>
+        <input class="field" id="model" placeholder="Provider default">
+      </div>
+
+      <div class="form-field">
+        <label class="label">Tavily Search API Key (optional)</label>
+        <input class="field" type="password" id="searchKey" placeholder="For broader web search">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn primary" id="saveSettings">Save to this tab</button>
+        <button class="btn ghost" id="cancelSettings">Cancel</button>
+      </div>
+
+      <div class="modal-note">
+        The local backend proxies requests to the selected provider; it does not store keys or resume text. API usage may be billed by your provider.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/resume-studio.js" defer></script>
+</body>
+</html>

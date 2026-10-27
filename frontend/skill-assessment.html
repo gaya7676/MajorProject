@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142D4E">
+<title>Credixa — Skill Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/skill-assessment.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="/dashboard" style="text-decoration:none;color:#FFFFFF">
+    <div class="brand-mark">✳</div>
+    Credixa<span>/ Skill Assessment</span>
+  </a>
+  <div class="top-right">
+    <a href="/dashboard" class="btn small ghost">← Back to Dashboard</a>
+    <div class="user-pill" id="userEmail"></div>
+    <button class="btn small" id="settingsBtn">⚙ Settings</button>
+    <button class="btn small" id="logoutBtn">Sign out</button>
+  </div>
+</header>
+
+<main class="assessment-wrap">
+  
+  <!-- Setup Phase -->
+  <section class="assessment-phase" id="setupPhase">
+    <div class="phase-hero">
+      <div class="eyebrow">SKILL ASSESSMENT</div>
+      <h1>Verify your skills.<br><em>Build credibility.</em></h1>
+      <p>Take a proctored assessment to demonstrate your technical expertise.</p>
+    </div>
+
+    <div class="setup-container">
+      <div class="setup-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Resume Skills Assessment</h2>
+            <p class="card-desc">All skills from your resume will be assessed</p>
+          </div>
+          <span class="tag">AUTO-DETECTED</span>
+        </div>
+
+        <div id="skillsEmpty" class="panel-empty">
+          <div class="empty-icon">◈</div>
+          <p>Analyze your resume in Resume Studio first to extract skills for assessment.</p>
+          <a href="/resume-studio" class="btn primary">Go to Resume Studio</a>
+        </div>
+
+        <div id="skillsArea" class="hide">
+          <div class="resume-skills-info">
+            <strong>Detected Skills (<span id="skillCount">0</span>):</strong>
+            <div id="skillsList" class="skills-display"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Assessment Configuration</h2>
+            <p class="card-desc">Set difficulty, question count, and time limits</p>
+          </div>
+        </div>
+
+        <div class="config-form">
+          <div class="form-field">
+            <label class="label">Total Questions</label>
+            <select class="field" id="totalQuestions">
+              <option value="20">20 questions — Quick assessment</option>
+              <option value="30" selected>30 questions — Balanced coverage</option>
+              <option value="50">50 questions — Comprehensive evaluation</option>
+            </select>
+            <p class="field-hint">Questions will be distributed across all detected skills</p>
+          </div>
+
+          <div class="form-field">
+            <label class="label">Difficulty Level</label>
+            <select class="field" id="difficulty">
+              <option value="beginner">Beginner — Fundamental concepts</option>
+              <option value="intermediate" selected>Intermediate — Practical applications</option>
+              <option value="advanced">Advanced — Complex scenarios</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label class="label">Third Warning Action</label>
+            <select class="field" id="warningAction">
+              <option value="submit">Submit current answers</option>
+              <option value="terminate">Terminate without scoring</option>
+            </select>
+          </div>
+
+          <div id="distributionPreview" class="distribution-preview hide">
+            <div class="preview-header">
+              <strong>Question Distribution Preview</strong>
+              <span class="preview-time" id="previewTime"></span>
+            </div>
+            <div id="distributionList" class="distribution-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-card proctoring-info">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Proctoring Guidelines</h2>
+            <p class="card-desc">What to expect during your assessment</p>
+          </div>
+          <span class="tag">CAMERA MONITORING</span>
+        </div>
+
+        <div class="guidelines">
+          <div class="guideline">
+            <div class="guideline-icon">📹</div>
+            <div>
+              <strong>Camera Access</strong>
+              <p>Your browser will request camera permission. Video is processed locally and not uploaded.</p>
+            </div>
+          </div>
+
+          <div class="guideline">
+            <div class="guideline-icon">👤</div>
+            <div>
+              <strong>Face Detection</strong>
+              <p>System detects: no face (5s), multiple faces (2s), head turned away (4s), or tab hidden (2s).</p>
+            </div>
+          </div>
+
+          <div class="guideline">
+            <div class="guideline-icon">⚠️</div>
+            <div>
+              <strong>Warning System</strong>
+              <p>First two violations trigger warnings. Third violation will submit or terminate based on your setting.</p>
+            </div>
+          </div>
+
+          <div class="guideline">
+            <div class="guideline-icon">✓</div>
+            <div>
+              <strong>Verification Criteria</strong>
+              <p>Score 80% or higher on each individual skill to mark it as verified.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="disclaimer">
+          Camera monitoring provides review signals only and is imperfect. It does not verify identity. Normal blinking and minor movements are not flagged.
+        </div>
+      </div>
+
+      <div class="setup-actions">
+        <button class="btn primary large" id="startAssessmentBtn" disabled>
+          Start Assessment
+        </button>
+        <p class="setup-hint" id="setupHint">Select total questions to preview distribution</p>
+      </div>
+
+      <div id="setupStatus" class="status"></div>
+    </div>
+  </section>
+
+  <!-- Exam Phase -->
+  <section class="assessment-phase hide" id="examPhase">
+    <div class="exam-toolbar">
+      <div class="toolbar-left">
+        <span class="toolbar-item" id="progressIndicator">Question 1/15</span>
+      </div>
+      <div class="toolbar-center">
+        <div class="timer" id="timer">15:00</div>
+      </div>
+      <div class="toolbar-right">
+        <div class="warnings" id="warningsCounter">
+          <span class="warning-icon">⚠️</span>
+          <span id="warningCount">0/3 Warnings</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exam-container">
+      <div class="exam-main">
+        <div class="camera-panel" id="cameraPanel">
+          <video id="proctorVideo" autoplay muted playsinline></video>
+          <div class="camera-status">
+            <strong id="cameraStatusText">Camera not started</strong>
+            <p id="cameraStatusDetail">Camera permission will be requested when you start.</p>
+          </div>
+          <button class="btn small ghost" id="retryCameraBtn">Retry Camera</button>
+        </div>
+
+        <div id="warningNotice" class="warning-notice hide" role="alert"></div>
+
+        <div class="question-card" id="questionCard">
+          <div class="question-header">
+            <span class="skill-badge" id="currentSkillBadge">Skill</span>
+            <span class="question-number" id="questionNumber">Question 1</span>
+          </div>
+
+          <div class="question-text" id="questionText">
+            Loading question...
+          </div>
+
+          <div class="options-list" id="optionsList">
+            <!-- Options will be dynamically inserted -->
+          </div>
+        </div>
+
+        <div class="exam-navigation">
+          <button class="btn" id="previousBtn">← Previous</button>
+          <button class="btn primary" id="nextBtn">Next →</button>
+          <button class="btn" id="submitExamBtn">Submit Assessment</button>
+        </div>
+
+        <div id="examStatus" class="status"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Results Phase -->
+  <section class="assessment-phase hide" id="resultsPhase">
+    <div class="phase-hero">
+      <div class="eyebrow">ASSESSMENT COMPLETE</div>
+      <h1>Your Results</h1>
+      <p id="resultsSubtitle">Assessment submitted successfully</p>
+    </div>
+
+    <div class="results-container">
+      <div class="results-summary" id="resultsSummary">
+        <!-- Will be populated with results -->
+      </div>
+
+      <div class="results-actions">
+        <a href="/dashboard" class="btn primary">Return to Dashboard</a>
+        <button class="btn" id="newAssessmentBtn">Take Another Assessment</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Assessment History -->
+  <section class="history-section" id="historySection">
+    <div class="section-header">
+      <h2 class="section-title">Assessment History</h2>
+      <p class="section-desc">Your past assessment reports</p>
+    </div>
+
+    <div id="historyEmpty" class="panel-empty">
+      <p>No assessment reports yet. Complete an assessment to see results here.</p>
+    </div>
+
+    <div id="historyList" class="history-list hide">
+      <!-- History items will be populated here -->
+    </div>
+  </section>
+
+</main>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Assessment Settings</h2>
+      <button class="modal-close" id="closeSettings">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-note">Configure your LLM provider to generate assessment questions. Keys stay in this tab only.</p>
+      <p class="modal-note" style="background: var(--teal-light, #E6F7F4); border: 1px solid var(--teal-border, #B3E5D8); padding: 10px; border-radius: 6px; margin-bottom: 16px;">
+        <strong>Note:</strong> If your administrator has configured environment variables (OPENAI_API_KEY, ANTHROPIC_API_KEY, or GEMINI_API_KEY), you don't need to provide a key here. The system will use server-side configuration automatically.
+      </p>
+      
+      <div class="form-field">
+        <label class="label">LLM Provider</label>
+        <select class="field" id="provider">
+          <option value="openai">OpenAI compatible</option>
+          <option value="anthropic">Anthropic</option>
+          <option value="gemini">Google Gemini</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label class="label">LLM API Key</label>
+        <input class="field" type="password" id="llmKey" placeholder="Required for question generation">
+      </div>
+
+      <div class="form-field">
+        <label class="label">Model (optional)</label>
+        <input class="field" id="model" placeholder="Provider default">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn primary" id="saveSettings">Save to this tab</button>
+        <button class="btn ghost" id="cancelSettings">Cancel</button>
+      </div>
+
+      <div class="modal-note">
+        Questions are generated based on skills from your resume. Assessment requires an active LLM API key.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/vision_bundle.js" defer></script>
+<script src="/skill-assessment.js" defer></script>
+</body>
+</html>

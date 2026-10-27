@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142D4E">
+<title>Credixa — Manage Verifications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/manage-verifications.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="/dashboard" style="text-decoration:none;color:#FFFFFF">
+    <div class="brand-mark">✳</div>
+    Credixa<span>/ Manage Verifications</span>
+  </a>
+  <div class="top-right">
+    <a href="/dashboard" class="btn small ghost">← Back to Dashboard</a>
+    <div class="user-pill" id="userEmail"></div>
+    <button class="btn small" id="logoutBtn">Sign out</button>
+  </div>
+</header>
+
+<main class="verifications-main">
+  <div class="page-hero">
+    <div class="eyebrow">SKILL VERIFICATION</div>
+    <h1>Manage Your Verifications</h1>
+    <p>View assessment results, create verification records, and download your verified resume.</p>
+  </div>
+
+  <!-- Resume Status Section -->
+  <section class="verification-section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Resume Status</h2>
+        <p class="section-desc">Your uploaded resume and analysis results</p>
+      </div>
+    </div>
+
+    <div class="status-card" id="resumeStatusCard">
+      <div class="status-grid">
+        <div class="status-item">
+          <span class="status-label">Resume</span>
+          <span class="status-value" id="resumeUploaded">Not uploaded</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">ATS Score</span>
+          <span class="status-value" id="atsScore">—</span>
+        </div>
+        <div class="status-item">
+          <span class="status-label">Extracted Skills</span>
+          <span class="status-value" id="extractedSkills">0 skills</span>
+        </div>
+      </div>
+      <div class="status-actions">
+        <a href="/resume-studio" class="btn primary">Go to Resume Studio</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Assessment Results Section -->
+  <section class="verification-section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Assessment Results</h2>
+        <p class="section-desc">Your skill assessment scores and verification status</p>
+      </div>
+      <a href="/skill-assessment" class="btn">Take Assessment</a>
+    </div>
+
+    <div id="assessmentEmpty" class="empty-state">
+      <div class="empty-icon">◈</div>
+      <p>No assessments completed yet. Complete a skill assessment to verify your expertise.</p>
+      <a href="/skill-assessment" class="btn primary">Start Assessment</a>
+    </div>
+
+    <div id="assessmentResults" class="hide">
+      <div class="results-grid" id="resultsGrid"></div>
+    </div>
+  </section>
+
+  <!-- Verification Records Section -->
+  <section class="verification-section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Verification Records</h2>
+        <p class="section-desc">Blockchain-backed verification records with QR codes</p>
+      </div>
+      <button class="btn primary" id="createVerificationBtn">Create Verification Record</button>
+    </div>
+
+    <div id="verificationEmpty" class="empty-state">
+      <div class="empty-icon">⌘</div>
+      <p>No verification records yet. Complete an assessment and create a verification record.</p>
+    </div>
+
+    <div id="verificationRecords" class="hide">
+      <div class="records-grid" id="recordsGrid"></div>
+    </div>
+
+    <div class="status-message" id="verificationStatus"></div>
+  </section>
+
+  <!-- Verified Resume Download Section -->
+  <section class="verification-section" id="downloadSection" class="hide">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Download Verified Resume</h2>
+        <p class="section-desc">Generate PDF with verified skills badge and QR code</p>
+      </div>
+    </div>
+
+    <div class="download-card">
+      <div class="download-preview">
+        <div class="preview-icon">📄</div>
+        <div class="preview-info">
+          <h3>Credixa Verified Skills Resume</h3>
+          <p>PDF with verification badge, QR code, and skill-by-skill verification status</p>
+        </div>
+      </div>
+
+      <div class="download-options">
+        <label class="checkbox-label">
+          <input type="checkbox" id="includeContactInPdf">
+          <span>Include contact information in PDF</span>
+        </label>
+      </div>
+
+      <div class="download-actions">
+        <button class="btn primary large" id="downloadVerifiedPdfBtn" disabled>
+          Download Verified Resume PDF
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="page-footer">
+    <p>Credixa Manage Verifications · Assessment evidence is separate from identity verification</p>
+  </footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js" defer></script>
+<script src="/vendor/jspdf.umd.min.js" defer></script>
+<script src="/vendor/qrcode.min.js" defer></script>
+<script src="/manage-verifications.js" defer></script>
+</body>
+</html>

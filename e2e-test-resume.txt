@@ -1,0 +1,19 @@
+Credixa Test Candidate
+credixa-e2e@example.test
+
+Summary
+Frontend developer with JavaScript and React experience.
+
+Skills
+JavaScript, React, Python, SQL, HTML, CSS
+
+Experience
+Web Developer, Test Studio, 2022-2025
+- Built accessible interfaces using React.
+- Improved page load time by 25% through code splitting.
+
+Education
+Bachelor of Science in Computer Science, 2022
+
+Projects
+Resume Matcher: built a personal project using JavaScript and SQL.

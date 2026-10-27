@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#142D4E">
+<title>Credixa · Record Verification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-navy: #142D4E;
+  --primary-blue: #2563EB;
+  --primary-blue-hover: #1D4ED8;
+  --teal: #0F9D8A;
+  --teal-dark: #0B7A6B;
+  --teal-light: #E6F7F5;
+  --teal-border: #99E2D8;
+  --bg: #F4F7FB;
+  --card-bg: #FFFFFF;
+  --text-primary: #172B4D;
+  --muted: #52627A;
+  --border: #D7E0EA;
+  --warning: #B45309;
+  --warning-bg: #FEF3C7;
+  --warning-border: #FCD34D;
+  --warning-text: #92400E;
+  --error: #B91C1C;
+  --error-bg: #FEE2E2;
+  --error-border: #FCA5A5;
+  --error-text: #991B1B;
+  --success: #166534;
+  --success-bg: #DCFCE7;
+  --success-border: #86EFAC;
+  --radius: 12px;
+  --shadow: 0 4px 16px rgba(20, 45, 78, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bar {
+  height: 72px;
+  background: var(--primary-navy);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(20px, 5vw, 64px);
+  box-shadow: 0 2px 8px rgba(20, 45, 78, 0.12);
+}
+
+.brand {
+  font: 800 19px/1 'Manrope', sans-serif;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand span {
+  color: #94A3B8;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.shell {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+.eyebrow {
+  font: 600 11px/1 'DM Mono', monospace;
+  letter-spacing: 1.2px;
+  color: var(--primary-blue);
+  text-transform: uppercase;
+}
+
+.shell h1 {
+  font: 800 clamp(28px, 4.5vw, 40px)/1.2 'Manrope', sans-serif;
+  letter-spacing: -0.6px;
+  color: var(--primary-navy);
+  margin: 10px 0 12px;
+}
+
+.lead {
+  max-width: 660px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.record {
+  margin-top: 28px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 700 16px 'Manrope', sans-serif;
+  padding: 14px 18px;
+  border-radius: 8px;
+  background: #F8FAFC;
+  border: 1px solid var(--border);
+  color: var(--primary-navy);
+}
+
+.mark {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+.status.match {
+  background: var(--teal-light);
+  border-color: var(--teal-border);
+  color: var(--teal-dark);
+}
+
+.status.match .mark {
+  background: var(--teal);
+  box-shadow: 0 0 10px rgba(15, 157, 138, 0.4);
+}
+
+.status.warning {
+  background: var(--warning-bg);
+  border-color: var(--warning-border);
+  color: var(--warning-text);
+}
+
+.status.warning .mark {
+  background: var(--warning);
+}
+
+.status.fail {
+  background: var(--error-bg);
+  border-color: var(--error-border);
+  color: var(--error-text);
+}
+
+.status.fail .mark {
+  background: var(--error);
+}
+
+.explanation {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 14px 0 24px;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  background: #F8FAFC;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.field {
+  min-width: 0;
+}
+
+.field label {
+  display: block;
+  color: var(--muted);
+  font: 700 11px 'DM Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.field p {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-navy);
+  line-height: 1.5;
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.skills {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.skills h2 {
+  font: 700 16px 'Manrope', sans-serif;
+  color: var(--primary-navy);
+  margin: 0 0 6px;
+}
+
+.skill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  border-top: 1px solid var(--border);
+  padding: 12px 0;
+  font-size: 13px;
+}
+
+.skill span {
+  font-weight: 600;
+  color: var(--primary-navy);
+}
+
+.skill b {
+  font: 600 11px 'DM Mono', monospace;
+  color: var(--muted);
+  text-align: right;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: #F1F5F9;
+  border: 1px solid var(--border);
+}
+
+.skill b.good {
+  color: var(--teal-dark);
+  background: var(--teal-light);
+  border-color: var(--teal-border);
+  font-weight: 700;
+}
+
+.disclaimer {
+  margin-top: 24px;
+  padding: 14px;
+  border: 1px solid var(--warning-border);
+  border-radius: 8px;
+  background: var(--warning-bg);
+  color: var(--warning-text);
+  font-size: 12px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.foot {
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.retry {
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: var(--primary-navy);
+  padding: 9px 16px;
+  font: 600 12px 'DM Sans', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(20, 45, 78, 0.05);
+}
+
+.retry:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.hide {
+  display: none !important;
+}
+
+@media(max-width: 540px) {
+  .shell {
+    padding: 32px 18px;
+  }
+  .record {
+    padding: 20px;
+  }
+  .fields {
+    grid-template-columns: 1fr;
+  }
+  .skill {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+</style>
+</head>
+<body>
+<header class="bar"><div class="brand">✳ Credixa <span>/ public verification</span></div></header>
+<main class="shell">
+  <div class="eyebrow">Credixa Verified Skills</div>
+  <h1>Record integrity check</h1>
+  <p class="lead">This public page checks whether the stored assessment record matches the hash registered in Credixa's configured ResumeRegistry. It does not expose the resume or candidate contact details.</p>
+  <section class="record" aria-live="polite">
+    <div class="status" id="integrityStatus">
+      <span class="mark"></span>
+      <span id="statusTitle">Checking the stored record and blockchain…</span>
+    </div>
+    <p class="explanation" id="statusMessage">No verification result is shown until the record is fetched and checked against the ledger.</p>
+    <div class="fields">
+      <div class="field">
+        <label>Verification ID</label>
+        <p id="verificationId">—</p>
+      </div>
+      <div class="field">
+        <label>Assessment date</label>
+        <p id="assessmentDate">—</p>
+      </div>
+    </div>
+    <div class="skills">
+      <h2>Assessed skills</h2>
+      <div id="verifiedSkills">
+        <p class="explanation">Loading skill outcomes…</p>
+      </div>
+    </div>
+    <button class="retry hide" id="retryButton" type="button">Retry integrity check</button>
+    <div class="disclaimer">Integrity verification confirms only that the stored record matches its blockchain hash. Assessment results are separate evidence of answers scored against the assessment criteria; neither the hash nor this page proves the candidate's identity or genuine real-world skill.</div>
+  </section>
+  <p class="foot">Public data is limited to the random verification ID, passing skill names, assessment date, and integrity status. The resume, contact information, and failed or unassessed skill names are not published.</p>
+</main>
+<script>
+const id = location.pathname.match(/^\/verify\/([a-f0-9]{48})\/?$/)?.[1];
+const statusNode = document.getElementById('integrityStatus');
+const titleNode = document.getElementById('statusTitle');
+const messageNode = document.getElementById('statusMessage');
+const retryButton = document.getElementById('retryButton');
+function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char])); }
+function showStatus(kind, title, message) { statusNode.className = `status ${kind}`; titleNode.textContent = title; messageNode.textContent = message; }
+async function checkRecord() {
+  retryButton.classList.add('hide');
+  if (!id) { showStatus('fail', 'Invalid verification link', 'The verification ID in this URL is not valid.'); return; }
+  try {
+    const response = await fetch(`/api/public-verifications/${id}`, { cache: 'no-store' });
+    const data = await response.json();
+    if (data.verificationId) document.getElementById('verificationId').textContent = data.verificationId;
+    if (data.assessmentDate) document.getElementById('assessmentDate').textContent = new Date(data.assessmentDate).toLocaleDateString();
+    const skills = data.verifiedSkills || [];
+    const integrityValid = data.status === 'integrity_match';
+    document.getElementById('verifiedSkills').innerHTML = skills.length ? skills.map(item => `<div class="skill"><span>${escapeHtml(item.skill)}</span><b class="${integrityValid ? 'good' : ''}">${integrityValid ? 'Verified · assessment criteria met' : 'Assessment passed · integrity not verified'} · ${escapeHtml(item.score)}%</b></div>`).join('') : '<p class="explanation">No skill outcomes are publicly listed as verified for this record.</p>';
+    if (!response.ok && response.status === 404) { showStatus('fail', 'Record not found', data.message || 'No record exists for this verification ID.'); return; }
+    if (data.status === 'integrity_match') showStatus('match', 'Record integrity verified', data.message);
+    else if (data.status === 'ledger_unavailable') showStatus('warning', 'Blockchain check unavailable', data.message);
+    else if (data.status === 'record_modified' || data.status === 'resume_modified') showStatus('fail', 'Record integrity mismatch', data.message);
+    else if (data.status === 'ledger_record_missing') showStatus('fail', 'Ledger record missing', data.message);
+    else showStatus('warning', 'Not blockchain verified', data.message || 'This record has not been anchored to the blockchain.');
+    if (['ledger_unavailable', 'not_anchored'].includes(data.status)) retryButton.classList.remove('hide');
+  } catch (error) {
+    showStatus('warning', 'Could not check record integrity', `The verification service could not be reached: ${error.message}`);
+    retryButton.classList.remove('hide');
+  }
+}
+retryButton.addEventListener('click', checkRecord);
+checkRecord();
+</script>
+</body>
+</html>

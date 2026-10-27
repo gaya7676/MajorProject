@@ -1,0 +1,154 @@
+.verified-resume-card {
+  margin-top: 24px;
+}
+
+.verified-record-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.verified-share-choice {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 16px;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.verified-share-choice input {
+  accent-color: var(--primary-blue);
+  cursor: pointer;
+}
+
+.verification-status {
+  margin-top: 14px;
+}
+
+.verification-record-summary {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  background: var(--panel-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.verification-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+  font-size: 13px;
+}
+
+.verification-summary-row + .verification-summary-row {
+  border-top: 1px solid var(--border);
+}
+
+.verification-summary-row span {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.verification-summary-row strong {
+  color: var(--primary-navy);
+  font-weight: 700;
+}
+
+.verification-summary-row code {
+  font: 600 12px 'DM Mono', monospace;
+  overflow-wrap: anywhere;
+  max-width: 65%;
+  text-align: right;
+  color: var(--primary-navy);
+  background: #FFFFFF;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* QR Code & Verification Link Container */
+.verification-qr-wrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-subtle);
+}
+
+.verification-qr-wrap img {
+  width: 140px;
+  height: 140px;
+  image-rendering: pixelated;
+  background: #FFFFFF;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.verification-qr-wrap a {
+  color: var(--primary-blue);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.verification-qr-wrap a:hover {
+  text-decoration: underline;
+  color: var(--primary-blue-hover);
+}
+
+.verification-disclaimer {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.verified-resume-card .status.error {
+  color: var(--error-text);
+  background: var(--error-bg);
+  border: 1px solid var(--error-border);
+}
+
+.verified-resume-card .status.ok {
+  color: var(--teal-dark);
+  background: var(--teal-light);
+  border: 1px solid var(--teal-border);
+}
+
+@media(max-width: 540px) {
+  .verified-record-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .verified-record-actions .btn {
+    width: 100%;
+  }
+  .verification-summary-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .verification-summary-row code {
+    max-width: 100%;
+    text-align: left;
+  }
+  .verification-qr-wrap {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}

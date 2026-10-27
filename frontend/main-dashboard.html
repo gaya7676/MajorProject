@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142D4E">
+<title>Credixa — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/main-dashboard.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="/dashboard" style="text-decoration:none;color:#FFFFFF">
+    <div class="brand-mark">✳</div>
+    Credixa
+  </a>
+  <div class="top-right">
+    <div class="user-pill" id="userEmail"></div>
+    <button class="btn small" id="logoutBtn">Sign out</button>
+  </div>
+</header>
+
+<main class="dashboard-main">
+  <div class="dashboard-hero">
+    <div class="hero-content">
+      <div class="eyebrow">YOUR CAREER AT A GLANCE</div>
+      <h1>Welcome back, <em id="userName">there</em>.</h1>
+      <p>Your resume, skills verification, and career progress in one place.</p>
+    </div>
+  </div>
+
+  <section class="quick-status">
+    <div class="status-card">
+      <div class="status-icon">📄</div>
+      <div class="status-info">
+        <strong>Resume</strong>
+        <p id="resumeStatus">Not uploaded</p>
+      </div>
+    </div>
+
+    <div class="status-card">
+      <div class="status-icon">◈</div>
+      <div class="status-info">
+        <strong>Assessment</strong>
+        <p id="assessmentStatus">Not started</p>
+      </div>
+    </div>
+
+    <div class="status-card">
+      <div class="status-icon">✓</div>
+      <div class="status-info">
+        <strong>Verification</strong>
+        <p id="verificationStatus">Not verified</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="continue-workflow">
+    <button class="btn-continue" id="continueBtn">
+      Continue Workflow →
+    </button>
+    <p class="continue-hint" id="continueHint">Upload your resume to get started</p>
+  </div>
+
+  <section class="dashboard-nav">
+    <a href="/resume-studio" class="nav-tile">
+      <div class="nav-tile-icon">✳</div>
+      <div class="nav-tile-content">
+        <h3>Resume Studio</h3>
+        <p>Upload, analyze, and improve your resume</p>
+      </div>
+      <div class="nav-arrow">→</div>
+    </a>
+
+    <a href="/skill-assessment" class="nav-tile">
+      <div class="nav-tile-icon">◈</div>
+      <div class="nav-tile-content">
+        <h3>Skill Assessment</h3>
+        <p>Take proctored tests to verify your skills</p>
+      </div>
+      <div class="nav-arrow">→</div>
+    </a>
+
+    <a href="/manage-verifications" class="nav-tile">
+      <div class="nav-tile-icon">⌘</div>
+      <div class="nav-tile-content">
+        <h3>Manage Verifications</h3>
+        <p>View and manage your skill verifications</p>
+      </div>
+      <div class="nav-arrow">→</div>
+    </a>
+  </section>
+
+  <footer class="dashboard-footer">
+    <p>Credixa Dashboard · Your account data is private and encrypted.</p>
+  </footer>
+</main>
+
+<script src="/main-dashboard.js" defer></script>
+</body>
+</html>
