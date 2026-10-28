@@ -1,3 +1,12 @@
+require('dotenv').config({
+  path: require('node:path').join(__dirname, '.env')
+});
+
+console.log(
+  "Gemini API key loaded:",
+  Boolean(process.env.GEMINI_API_KEY)
+);
+
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
@@ -161,20 +170,73 @@ async function requestAssessmentQuestions({ provider, apiKey, model, skills, dif
     headers={'x-api-key':effectiveApiKey,'anthropic-version':'2023-06-01','content-type':'application/json'};
     payload={model:model||'claude-3-5-sonnet-latest',max_tokens:8000,messages:[{role:'user',content:prompt}]};
   }else if(provider==='gemini'){
-    url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model||'gemini-2.5-flash')}:generateContent?key=${encodeURIComponent(effectiveApiKey)}`;
+    url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model||'gemini-3.8-flash')}:generateContent?key=${encodeURIComponent(effectiveApiKey)}`;
     headers={'content-type':'application/json'};
-    payload={contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:8000,responseMimeType:'application/json'}};
+    payload={contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:16000,responseMimeType:'application/json'}};
   }else{
     url=process.env.OPENAI_API_BASE_URL||'https://api.openai.com/v1/chat/completions';
     headers={'Authorization':`Bearer ${effectiveApiKey}`,'content-type':'application/json'};
     payload={model:model||'gpt-4o-mini',messages:[{role:'user',content:prompt}],temperature:0.2,response_format:{type:'json_object'}};
   }
-  const response=await fetch(url,{method:'POST',headers,body:JSON.stringify(payload),signal:AbortSignal.timeout(60_000)});
+ const timeoutMs = Number(process.env.LLM_TIMEOUT_MS || 300000);
+
+console.log(
+  `[Assessment] Provider: ${provider}, Model: ${model || "default"}, Questions: ${totalExpected}, Timeout: ${timeoutMs}ms`
+);
+
+const startedAt = Date.now();
+
+let response;
+
+try {
+  response = await fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+} catch (error) {
+  console.error(
+    `[Assessment] Request failed after ${Date.now() - startedAt}ms:`,
+    error.name,
+    error.message
+  );
+
+  if (error.name === "TimeoutError" || error.name === "AbortError") {
+    throw new Error(
+      `Assessment generation timed out after ${timeoutMs / 1000} seconds. Try fewer questions or retry.`
+    );
+  }
+
+  throw error;
+}
+
+console.log(`[Assessment] HTTP response received in ${Date.now() - startedAt}ms`);
   const data=await response.json();
   if(!response.ok)throw new Error(data.error?.message||data.message||`LLM provider returned ${response.status}`);
   const content=provider==='anthropic'?data.content?.find(item=>item.type==='text')?.text:provider==='gemini'?data.candidates?.[0]?.content?.parts?.[0]?.text:data.choices?.[0]?.message?.content;
   if(!content)throw new Error('The model returned an empty assessment response.');
-  const parsed=JSON.parse(content.trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,''));
+
+const cleanedContent = content
+  .trim()
+  .replace(/^```(?:json)?\s*/i, "")
+  .replace(/\s*```$/, "");
+
+let parsed;
+
+try {
+  parsed = JSON.parse(cleanedContent);
+} catch (error) {
+  console.error("Assessment JSON parsing failed:", error.message);
+  console.error("Response length:", cleanedContent.length);
+  console.error("Response ending:", cleanedContent.slice(-500));
+  console.error("Gemini finish reason:", data.candidates?.[0]?.finishReason);
+
+  throw new Error(
+    "Gemini returned invalid or incomplete assessment JSON. Check the backend terminal for diagnostics."
+  );
+}
+
   if(!Array.isArray(parsed.questions))throw new Error('The model response did not contain a questions list.');
   
   // Validate total question count
@@ -523,7 +585,7 @@ const server = http.createServer(async (req, res) => {
         if (!apiKey || !Array.isArray(messages)) throw new Error('Add your model API key and try again.');
         let url, payload, hdr;
         if (provider === 'anthropic') { url='https://api.anthropic.com/v1/messages'; hdr={'x-api-key':apiKey,'anthropic-version':'2023-06-01','content-type':'application/json'}; payload={model:model||'claude-3-5-sonnet-latest',max_tokens:2400,messages:messages.map(m=>({role:m.role,content:m.content}))}; }
-        else if (provider === 'gemini') { url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model||'gemini-2.5-flash')}:generateContent?key=${encodeURIComponent(apiKey)}`; hdr={'content-type':'application/json'}; payload={contents:messages.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{maxOutputTokens:2400,responseMimeType:'application/json'}}; }
+        else if (provider === 'gemini') { url=`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model||'gemini-3.8-flash')}:generateContent?key=${encodeURIComponent(apiKey)}`; hdr={'content-type':'application/json'}; payload={contents:messages.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]})),generationConfig:{maxOutputTokens:2400,responseMimeType:'application/json'}}; }
         else { url=process.env.OPENAI_API_BASE_URL||'https://api.openai.com/v1/chat/completions'; hdr={'Authorization':`Bearer ${apiKey}`,'content-type':'application/json'}; payload={model:model||'gpt-4o-mini',messages,temperature:0.25,response_format:{type:'json_object'}}; }
         const upstream=await fetch(url,{method:'POST',headers:hdr,body:JSON.stringify(payload)});
         const data=await upstream.json(); if(!upstream.ok) throw new Error(data.error?.message||data.message||`Provider returned ${upstream.status}`);

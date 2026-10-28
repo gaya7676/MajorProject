@@ -88,11 +88,7 @@ async function startAssessment() {
     assessment$('assessmentSetupStatus').className = 'status error';
     return;
   }
-  if (!conf.llmKey) {
-    assessment$('assessmentSetupStatus').textContent = 'Add an LLM provider API key in Settings to generate assessment questions.';
-    assessment$('assessmentSetupStatus').className = 'status error';
-    return;
-  }
+  // API key is optional - backend will use environment variables if not provided
   const button = assessment$('startAssessmentBtn');
   button.disabled = true;
   assessment$('assessmentSetupStatus').textContent = 'Generating and validating questions for the selected resume skills…';

@@ -19,7 +19,7 @@ let detectionInterval = null;
 
 // Configuration (stored in sessionStorage)
 const conf = {
-  get provider() { return sessionStorage.getItem('llm_provider') || 'openai'; },
+  get provider() { return sessionStorage.getItem('llm_provider') || 'gemini'; },
   set provider(v) { sessionStorage.setItem('llm_provider', v); },
   get llmKey() { return sessionStorage.getItem('llm_key') || ''; },
   set llmKey(v) { sessionStorage.setItem('llm_key', v); },
